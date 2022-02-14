@@ -1,0 +1,13 @@
+diff --git a/init/main.c b/init/main.c
+index 004c75de5..b764779ef 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1067,6 +1067,8 @@ static int __ref kernel_init(void *unused)
+ 	system_state = SYSTEM_RUNNING;
+ 	numa_default_policy();
+ 
++	printk(KERN_NOTICE "\n##### Hunter Schwartz (UFID: 7496-7318) My Personal Message #####\n\n");
++
+ 	rcu_end_inkernel_boot();
+ 
+ 	if (ramdisk_execute_command) {

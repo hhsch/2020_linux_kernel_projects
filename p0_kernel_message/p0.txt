@@ -1,0 +1,22 @@
+(Harold) Hunter Schwartz
+COP4600 Operating Systems
+Project 0 - Kernel Mod
+2 Feb 2020
+
+Modified files:
+---------------
+(1) /usr/rep/src/linux-hwe-5.0.0/init/main.c
+
+
+Changes made:
+-------------
+(1) I added a procedure call to "printk" after the excess memory was deallocated but before the call to end the early boot phase/start init was made. This call prints to the kernel console, so as its parameter I put the string that I wanted to print with my name and UFID. The procedure "printk" writes into the kernel's boot buffer.
+
+
+Testing:
+--------
+I tested to make sure the project works by first creating a diff file. I then saved that file and restored the VM to its clean state. Upon booting the clean image, no special boot messages were displayed. I then applied the diff file to the kernel source, and after re-compiling and rebooting, the message was successfully displayed.
+
+Screencast:
+-----------
+https://youtu.be/wKLbhbxhMvY

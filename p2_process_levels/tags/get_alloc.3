@@ -1,0 +1,27 @@
+.TH XET_TAG 3 "2020-04-09" "Linux" "COP6400 P2 - Library functions"
+.SH NAME
+get_alloc, set_alloc \- manipulate the allocation of scheduling levels
+.SH SYNOPSIS
+.B #include <tags.h>
+.br
+Compile with \fB-ltags\fR.
+.PP
+.B int get_alloc(int \fIlevel\fB);
+.br
+.B int set_alloc(int \fIlevel\fB, int \fInew_allocation\fB);
+.SH DESCRIPTION
+Wrappers for \fBget_level_alloc(2)\fR and \fBset_level_alloc(2)\fR.
+.PP
+\fBget_alloc\fR() returns the allocation assigned to level \fIlevel\fR from the runqueue of the current CPU.
+.PP
+\fBset_alloc\fR() attempts to set the allocation assigned to level \fIlevel\fR of the runqueue of the current CPU. This may only be called by the root user, and can not allow the sum of all allocations to fall below 5 ms.
+.SH ERRORS
+\fBget_alloc\fR() returns -1 if the level does not exist (is not 0-3).
+.PP
+\fBset_alloc\fR() returns -1 if the level does not exist, or the caller is not root.
+.SH NOTES
+The error values described above are returned by the library functions, and are different (less specific) than the values returned after an error by the corresponding syscalls.
+.SH SEE ALSO
+.B get_tag(2), set_tag(2)
+.SH AUTHOR
+Hunter Schwartz (schwartzh@ufl.edu), University of Florida, CISE Department

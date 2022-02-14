@@ -1,0 +1,49 @@
+Project 2(7)	COP6400 P2 - Report	Project 2(7)
+
+(Harold) Hunter Schwartz
+COP4600 Operating Systems
+Project 2 - Scheduling
+9 Apr 2020
+
+MODIFIED FILES
+	(1) kernel/sched/sched.h
+	(2) kernel/sched/fair.c
+	(3) arch/x86/entry/syscalls/syscall_64.tbl
+	(4) include/linux/syscalls.h
+	(5) p2/
+	(6) Makefile
+
+
+CHANGES MADE
+
+(1) This file contains the definition of `struct cfs_rq`, to which I added an array of length 4 containing the allocations given to each level. I placed it here so that this information could be accessed while scheduling processes.
+
+(2) In this file, I made the initial allocation 10 ms for each level, adding this step to the cfs_rq initialization procedure.
+
+(3) This file contains a list of syscalls available to the kernel, which is used by scripts to create the boilerplate code for a syscall. Here is where I added my syscalls by giving them a name and an associated number.
+
+(4) Here I declared the syscall prototype, so that it could be linked by the kernel upon compilation.
+
+(5) In this folder, I both implemented the actual functionality of the syscalls in p2.c, and made a simple Makefile so that the kernel can compile the new syscalls automatically.
+
+(6) The last step is to make the kernel aware of where the syscall definitions are, so here I pointed the kernel to the p2/ folder to make sure the new syscalls were compiled.
+
+
+CHANGES NOT MADE
+
+Unfortunately, I was unable to implement the actual scheduling functionality using the tags. My plan was to alter the `scheduler_tick` procedure to keep track of how long a given level had been run for, and then to switch to the next when its time was up by using some sort of "current_level" variable. Then I wanted to alter the `pick_next_task_fair` function in kernel/sched/fair.c, so that it would only return processes whose levels matched the current level.
+
+However, where I got stuck was in finding some way to iterate over the red-black tree that is the runqueue until I found a process whose tag was correct. Initially, I tried to take off a task if its level was wrong and put it in a separate buffer. This would leave only tasks with the current level in the runqueue. After the level's allocation was over, I would replace all the removed tasks back into the runqueue. I realized this would not work though, as if a task in the buffer had its level changed to the current one, it would still not be able to be chosen even though its level matched the current.
+
+Next, I tried to iterate over the runqueue every time a task had to be chosen, even though it would be very inefficient (almost completely erasing the point of the red-black tree). At least no tasks would be forgotten. However, this would not change the `nr_running` variable in the runqueue, and thus if no valid tasks were found, the system would lock up and never idle because the idle task depends on there being no runnable tasks. Ultimately, the changes I tried to make left me with a bricked system, so I made what changes I could.
+
+
+TESTING
+
+While I was unable to implement the scheduling functionality, I was able to test that the system calls worked by using unit tests of my own that practiced getting and setting allocations for different levels. I also ran the battery of tests provided on Canvas, which ensured the desired properties for the system calls were satisfied. I then restored the machine to an untouched state, applied p2.diff and ran the tests again to make sure they worked.
+
+
+SCREENCAST
+	https://youtu.be/XUZf8lElUls
+
+		2020-04-09	Project 2(7)

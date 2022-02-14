@@ -1,0 +1,25 @@
+.TH XET_LEVEL_ALLOC 2 "2020-04-09" "Linux" "COP6400 P2 - Scheduling"
+.SH NAME
+get_level_alloc, set_level_alloc \- manipulate the allocation of scheduling levels
+.SH SYNOPSIS
+.B #include <tags.h>
+.PP
+.B int get_level_alloc(int \fIlevel\fB);
+.br
+.B int set_level_alloc(int \fIlevel\fB, int \fInew_allocation\fB);
+.SH DESCRIPTION
+Call with \fBsyscall(2)\fR using syscall numbers \fISYS_get_level_alloc\fR and \fISYS_set_level_alloc\fR.
+.PP
+\fBget_level_alloc\fR() returns the allocation assigned to level \fIlevel\fR from the runqueue of the current CPU.
+.PP
+\fBset_level_alloc\fR() attempts to set the allocation assigned to level \fIlevel\fR of the runqueue of the current CPU. This may only be called by the root user, and can not allow the sum of all allocations to fall below 5 ms.
+.SH ERRORS
+The syscalls set \fIerrno\fR to the following values in the case that the system calls fail.
+.PP
+\fBget_level_alloc\fR() returns -EINVAL (errno = 22) if the requested level falls outside the valid values of 0-3.
+.PP
+\fBset_level_alloc\fR() returns -EINVAL  (errno = 22) if the requested level falls outside the valid values of 0-3. The call returns -EACCES (errno = 13) if the user making the call is not the root user.
+.SH SEE ALSO
+.B get_alloc(3), set_alloc(3)
+.SH AUTHOR
+Hunter Schwartz (schwartzh@ufl.edu), University of Florida, CISE Department
